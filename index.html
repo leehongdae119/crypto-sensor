@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>실시간 감지센서 작동중</title>
+  <style>
+    body { background-color: #0d1117; color: white; font-family: sans-serif; text-align: center; padding-top: 50px; }
+    .time { margin-top: 20px; font-size: 1.2em; color: #58a6ff; }
+  </style>
+</head>
+<body>
+  <h1>🚨 실시간 감지센서 작동중</h1>
+  <div class="time">업데이트: <span id="update-time"></span></div>
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const formatted = now.toLocaleString("ko-KR");
+      document.getElementById("update-time").textContent = formatted;
+    }
+    updateTime();
+    setInterval(updateTime, 5000);
+  </script>
+</body>
+</html>
