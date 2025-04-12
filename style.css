@@ -1,0 +1,16 @@
+
+body {
+  background-color: #111;
+  color: #fff;
+  font-family: 'Pretendard', sans-serif;
+  text-align: center;
+  padding: 50px;
+}
+h1 {
+  font-size: 2.5rem;
+  color: #00f0ff;
+}
+p {
+  font-size: 1.2rem;
+  color: #ccc;
+}
