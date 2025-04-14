@@ -1,15 +1,81 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>실시간 감지센서 작동중!</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+  <title>실시간 감지센서</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #0e0e0e;
+      color: #00e6e6;
+      text-align: center;
+      padding: 50px 20px;
+    }
+    #loading {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .coin-card {
+      background: #1c1c1c;
+      margin: 10px auto;
+      padding: 15px;
+      border-radius: 10px;
+      max-width: 400px;
+      color: white;
+    }
+    .coin-card span {
+      display: block;
+      margin: 5px 0;
+    }
+  </style>
 </head>
 <body>
-  <h1>🚨 실시간 감지센서 작동중</h1>
-  <p id="update-time">업데이트 시각: 불러오는 중...</p>
+  <div id="loading">
+    🚨 <strong>실시간 감지센서 작동중</strong><br />
+    <span id="update-time"></span>
+  </div>
+  <div id="coin-list"></div>
+
+  <script>
+    const updateTime = document.getElementById("update-time");
+    const coinList = document.getElementById("coin-list");
+
+    function formatKRW(number) {
+      return new Intl.NumberFormat("ko-KR").format(number) + " ₩";
+    }
+
+    async function fetchData() {
+      try {
+        const res = await fetch("https://api.upbit.com/v1/ticker?markets=KRW-BTC,KRW-ETH,KRW-XRP,KRW-SOL,KRW-DOGE");
+        const data = await res.json();
+
+        coinList.innerHTML = "";
+
+        data.forEach((coin) => {
+          const card = document.createElement("div");
+          card.className = "coin-card";
+          card.innerHTML = `
+            <span><strong>${coin.market}</strong></span>
+            <span>가격: ${formatKRW(coin.trade_price)}</span>
+            <span>변동률: ${(coin.signed_change_rate * 100).toFixed(2)}%</span>
+          `;
+          coinList.appendChild(card);
+        });
+
+        const now = new Date();
+        updateTime.textContent = `업데이트: ${now.getFullYear()}. ${now.getMonth()+1}. ${now.getDate()} ${now.getHours()}:
+          ${String(now.getMinutes()).padStart(2, '0')}:
+          ${String(now.getSeconds()).padStart(2, '0')}`;
+      } catch (error) {
+        coinList.innerHTML = "데이터 불러오기 실패";
+        console.error(error);
+      }
+    }
+
+    fetchData();
+    setInterval(fetchData, 10000);
+  </script>
 </body>
 </html>
